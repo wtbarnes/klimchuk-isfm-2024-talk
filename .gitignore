@@ -2,6 +2,10 @@
 slides.html
 slides.ipynb
 slides_files
+node_modules/
+package.json
+package-lock.json
+*.pdf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
