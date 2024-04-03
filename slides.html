@@ -483,31 +483,36 @@ I \approx \frac{1}{A_{\mathrm{pix}}}\sum_sA_s\delta_s\varepsilon_s(n,T)
 </section>
 <section id="the-emissivity-kernel" class="slide level2">
 <h2>The Emissivity kernel</h2>
+<div>
 <ul>
-<li>Compute per loop segment using field-aligned model (function of <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span>)</li>
-<li>For a narrowband imager (e.g.&nbsp;AIA), <span class="math display">\[
+<li class="fragment">Compute per loop segment using field-aligned model–<span class="math inline">\(T\equiv T(s,t),n\equiv n(s,t)\)</span></li>
+<li class="fragment">For a narrowband imager (e.g.&nbsp;AIA), <span class="math display">\[
 \varepsilon = K(T)n^2\quad[\mathrm{DN}\,\mathrm{pix}^{-1}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-1}]
 \]</span></li>
-<li>For a spectral line intensity with a transition at <span class="math inline">\(\lambda_{ij}\)</span>, <span class="math display">\[
+<li class="fragment">For a spectral line intensity with a transition at <span class="math inline">\(\lambda_{ij}\)</span>, <span class="math display">\[
 \begin{align}
 \varepsilon &amp;= \frac{1}{4\pi}A_{ij}\frac{hc}{\lambda_{ij}}n_{ij}\quad[\mathrm{erg}\,\mathrm{cm}^{-3}\,\mathrm{s}^{-1}\,\mathrm{sr}^{-1}] \\
 &amp;= \frac{1}{4\pi}A_{ij}\frac{hc}{\lambda_{ij}}\frac{n_{ij}}{n_{X^+}}\frac{n_{X^+}}{n_X}\frac{n_X}{n_H}\frac{n_H}{n_e}n_e = \frac{1}{4\pi}G_{ij}(n,T)n_e^2
 \end{align}
 \]</span></li>
-<li>For the emission measure distribution on the interval <span class="math inline">\(T_a\le T&lt;T_b\)</span>, <span class="math display">\[
+<li class="fragment">For the emission measure distribution on the interval <span class="math inline">\(T_a\le T&lt;T_b\)</span>, <span class="math display">\[
 \varepsilon = n^2H(T-T_a)H(T_b-T)\quad[\mathrm{cm}^{-6}]
 \]</span></li>
 </ul>
+</div>
 </section>
 <section id="the-synthesizar-package" class="slide level2">
 <h2>The <code>synthesizAR</code> Package</h2>
 <ul>
 <li><code>synthesizAR</code> = <code>synthesi</code>s of <code>A</code>ctive <code>R</code>egion emission (pronounced like “synthesizer”)</li>
-<li>Largely a product of my PhD–development started in 2016, sporadic since 2019, <em>many</em> growing pains</li>
-<li>Pure Python, leverages scientific Python and “PyAstro” software stack</li>
-<li>Modular design–geometry, field-aligned model, instrument, LOS are all configurable</li>
-<li>Parallelized using <code>dask</code>–emission computation from each loop is “embarassingly” parallel</li>
-<li>Emission model can account for time-dependent effects (e.g.&nbsp;non-equilibrium ionization)</li>
+<li>Combine field-aligned models to produce spatially-resolved, time-dependent forward model</li>
+<li>Strengths:
+<ul>
+<li><strong>Modular</strong>–geometry, field-aligned model, instrument all configurable</li>
+<li><strong>Modern</strong>–pure Python, leverages scientific Python and “PyAstro” software stack</li>
+<li><strong>Efficient</strong>–emissivity from each strand computed in parallel</li>
+<li><strong>Dynamic</strong>–forward-modeled emission is <em>time-dependent</em></li>
+</ul></li>
 <li>Limitations:
 <ul>
 <li>All emission is assumed to be <strong>optically-thin</strong></li>
@@ -516,6 +521,9 @@ I \approx \frac{1}{A_{\mathrm{pix}}}\sum_sA_s\delta_s\varepsilon_s(n,T)
 </ul></li>
 </ul>
 
+<div class="footer">
+<p><a href="https://github.com/wtbarnes/synthesizar">github.com/wtbarnes/synthesizAR</a> / <a href="https://synthesizar.readthedocs.io">synthesizAR.readthedocs.io</a></p>
+</div>
 <aside><div>
 <p>More details in <span class="citation" data-cites="barnes_understanding_2019">Barnes et al. (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span></p>
 </div></aside></section>
@@ -534,10 +542,10 @@ I \approx \frac{1}{A_{\mathrm{pix}}}\sum_sA_s\delta_s\varepsilon_s(n,T)
 </div>
 <div class="cell fragment" data-execution_count="3">
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;SkyCoord (Heliocentric: obstime=2024-04-01 16:47:24.816621, observer=&lt;HeliographicStonyhurst Coordinate (obstime=2024-04-01 16:47:24.816621, rsun=695700.0 km): (lon, lat, radius) in (deg, deg, AU)
+<pre><code>&lt;SkyCoord (Heliocentric: obstime=2024-04-03 15:00:06.033637, observer=&lt;HeliographicStonyhurst Coordinate (obstime=2024-04-03 15:00:06.033637, rsun=695700.0 km): (lon, lat, radius) in (deg, deg, AU)
     (0., 0., 1.)&gt;): (x, y, z) in Mm
-    [(-15.53365488, 0.47993214, 695.7       ),
-     (-15.53357808, 0.47993214, 695.74884918)]&gt;</code></pre>
+    [(-15.5242241 , 0.60396071, 695.7       ),
+     (-15.52414734, 0.60396071, 695.74881953)]&gt;</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="4">
@@ -569,10 +577,10 @@ I \approx \frac{1}{A_{\mathrm{pix}}}\sum_sA_s\delta_s\varepsilon_s(n,T)
 </div>
 <div class="cell fragment" data-execution_count="5">
 <div class="cell-output cell-output-stdout">
-<pre><code>[2658085.23570705 2658085.23570705 2658085.23570705 2658085.23570705
- 2658085.23570705] K
-[1.71438439e+09 1.71438439e+09 1.71438439e+09 1.71438439e+09
- 1.71438439e+09] 1 / cm3</code></pre>
+<pre><code>[2657162.95812339 2657162.95812339 2657162.95812339 2657162.95812339
+ 2657162.95812339] K
+[1.71423566e+09 1.71423566e+09 1.71423566e+09 1.71423566e+09
+ 1.71423566e+09] 1 / cm3</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="6">
@@ -584,7 +592,7 @@ I \approx \frac{1}{A_{\mathrm{pix}}}\sum_sA_s\delta_s\varepsilon_s(n,T)
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="slides_files/figure-revealjs/cell-7-output-1.png" width="724" height="454"></p>
+<p><img data-src="slides_files/figure-revealjs/cell-7-output-1.png" width="732" height="454"></p>
 </figure>
 </div>
 </div>
@@ -650,7 +658,7 @@ I \approx \frac{1}{A_{\mathrm{pix}}}\sum_sA_s\delta_s\varepsilon_s(n,T)
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="slides_files/figure-revealjs/cell-8-output-1.png" width="753" height="404"></p>
+<p><img data-src="slides_files/figure-revealjs/cell-8-output-1.png" width="753" height="408"></p>
 </figure>
 </div>
 </div>
@@ -662,7 +670,7 @@ I \approx \frac{1}{A_{\mathrm{pix}}}\sum_sA_s\delta_s\varepsilon_s(n,T)
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="slides_files/figure-revealjs/cell-9-output-1.png" width="820" height="337"></p>
+<p><img data-src="slides_files/figure-revealjs/cell-9-output-1.png" width="820" height="339"></p>
 </figure>
 </div>
 </div>
@@ -715,7 +723,7 @@ I \approx \frac{1}{A_{\mathrm{pix}}}\sum_sA_s\delta_s\varepsilon_s(n,T)
 \end{align}
 \]</span>
 <ul>
-<li>For uninterrupted radiative and enthalpy-driven cooling, <span class="math inline">\(a\sim2--2.5\)</span></li>
+<li>For uninterrupted radiative and enthalpy-driven cooling, <span class="math inline">\(2\lesssim a\lesssim2.5\)</span></li>
 <li>As heating frequency increases, <span class="math inline">\(a\)</span> increases with more isothermal <span class="math inline">\(\mathrm{EM}\)</span></li>
 </ul></li>
 <li>Time lag <span class="math inline">\(\tau_{AB}\)</span> between AIA channels <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> <span class="math display">\[
@@ -739,11 +747,41 @@ I \approx \frac{1}{A_{\mathrm{pix}}}\sum_sA_s\delta_s\varepsilon_s(n,T)
 <p><img data-src="static/barnes_2019_em_slope.png"></p>
 <p><img data-src="static/barnes_2019_em_dist.png" class="fragment"></p>
 <p><img data-src="static/barnes_2019_time_lag.png" class="fragment"></p>
-<p><img data-src="static/barnes_2021_heating_class.png" class="fragment"></p>
 </div>
 
 <aside><div>
-<p>See <span class="citation" data-cites="barnes_understanding_2019">Barnes et al. (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span>,<span class="citation" data-cites="barnes_understanding_2021">Barnes et al. (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span></p>
+<p>See <span class="citation" data-cites="barnes_understanding_2019">Barnes et al. (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span></p>
+</div></aside></section>
+<section id="application-active-region-heating-diagnostics-3" class="slide level2">
+<h2>Application: Active Region Heating Diagnostics</h2>
+<div class="r-stack">
+<img data-src="static/observed-aia-emission.png" class="r-stretch">
+</div>
+
+<aside><div>
+<p>See <span class="citation" data-cites="barnes_understanding_2021">Barnes et al. (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span></p>
+</div></aside></section>
+<section id="application-active-region-heating-diagnostics-4" class="slide level2">
+<h2>Application: Active Region Heating Diagnostics</h2>
+<div class="columns">
+<div class="column" style="width:67%;">
+<p><img data-src="static/observed-em-slopes.png"></p>
+</div><div class="column" style="width:33%;">
+<p><img data-src="static/observed-timelags.png" class="fragment"></p>
+</div>
+</div>
+
+<aside><div>
+<p>See <span class="citation" data-cites="barnes_understanding_2021">Barnes et al. (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span></p>
+</div></aside></section>
+<section id="application-active-region-heating-diagnostics-5" class="slide level2">
+<h2>Application: Active Region Heating Diagnostics</h2>
+<div class="r-stack">
+<img data-src="static/barnes_2021_heating_class.png" class="r-stretch">
+</div>
+
+<aside><div>
+<p>See <span class="citation" data-cites="barnes_understanding_2021">Barnes et al. (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span></p>
 </div></aside></section>
 <section id="application-euv-flare-emission" class="slide level2" data-background-video="http://solar.physics.montana.edu/www/reu/2022/bparker/files/aia_211_dist.mp4" data-background-size="contain" data-background-video-loop="true">
 <h2>Application: EUV Flare Emission</h2>
