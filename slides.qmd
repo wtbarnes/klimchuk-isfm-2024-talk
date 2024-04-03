@@ -190,8 +190,8 @@ fig.set_frameon(False)
 ::::
 
 ## The Emissivity kernel
-
-- Compute per loop segment using field-aligned model (function of $s$ and $t$)
+:::{.incremental}
+- Compute per loop segment using field-aligned model--$T\equiv T(s,t),n\equiv n(s,t)$
 - For a narrowband imager (e.g. AIA),
 $$
 \varepsilon = K(T)n^2\quad[\mathrm{DN}\,\mathrm{pix}^{-1}\,\mathrm{s}^{-1}\,\mathrm{cm}^{-1}]
@@ -207,15 +207,17 @@ $$
 $$
 \varepsilon = n^2H(T-T_a)H(T_b-T)\quad[\mathrm{cm}^{-6}]
 $$
+:::
 
 ## The `synthesizAR` Package
 
 - `synthesizAR` = `synthesi`s of `A`ctive `R`egion emission (pronounced like "synthesizer")
-- Largely a product of my PhD--development started in 2016, sporadic since 2019, *many* growing pains
-- Pure Python, leverages scientific Python and "PyAstro" software stack
-- Modular design--geometry, field-aligned model, instrument, LOS are all configurable
-- Parallelized using `dask`--emission computation from each loop is "embarassingly" parallel
-- Emission model can account for time-dependent effects (e.g. non-equilibrium ionization)
+- Combine field-aligned models to produce spatially-resolved, time-dependent forward model
+- Strengths:
+  - **Modular**--geometry, field-aligned model, instrument all configurable
+  - **Modern**--pure Python, leverages scientific Python and "PyAstro" software stack
+  - **Efficient**--emissivity from each strand computed in parallel
+  - **Dynamic**--forward-modeled emission is *time-dependent*
 - Limitations:
   - All emission is assumed to be **optically-thin**
   - All emission is assumed to be **thermal** (i.e. no transport effects)
@@ -223,6 +225,10 @@ $$
 
 ::: {.aside}
 More details in @barnes_understanding_2019
+:::
+
+::: {.footer}
+[github.com/wtbarnes/synthesizAR](https://github.com/wtbarnes/synthesizar) / [synthesizAR.readthedocs.io](https://synthesizar.readthedocs.io)
 :::
 
 ## Workflow {visibility="hidden" background-image="static/synthesizar-flowchart.png" background-size="85%" background-position="center"}
@@ -476,7 +482,7 @@ $$
 \mathrm{EM}(T)&\propto T^a
 \end{align}
 $$
-  - For uninterrupted radiative and enthalpy-driven cooling, $a\sim2--2.5$
+  - For uninterrupted radiative and enthalpy-driven cooling, $2\lesssim a\lesssim2.5$
   - As heating frequency increases, $a$ increases with more isothermal $\mathrm{EM}$
 - Time lag $\tau_{AB}$ between AIA channels $A$ and $B$
 $$
@@ -500,12 +506,45 @@ $$
 ![](static/barnes_2019_em_dist.png){.fragment}
 
 ![](static/barnes_2019_time_lag.png){.fragment}
-
-![](static/barnes_2021_heating_class.png){.fragment}
 :::
 
 ::: {.aside}
-See @barnes_understanding_2019,@barnes_understanding_2021
+See @barnes_understanding_2019
+:::
+
+## Application: Active Region Heating Diagnostics
+
+::: {.r-stack}
+![](static/observed-aia-emission.png){.r-stretch}
+:::
+
+::: {.aside}
+See @barnes_understanding_2021
+:::
+
+## Application: Active Region Heating Diagnostics
+
+:::: {.columns}
+::: {.column width="67%"}
+![](static/observed-em-slopes.png)
+:::
+::: {.column width="33%"}
+![](static/observed-timelags.png){.fragment}
+:::
+::::
+
+::: {.aside}
+See @barnes_understanding_2021
+:::
+
+## Application: Active Region Heating Diagnostics
+
+:::{.r-stack}
+![](static/barnes_2021_heating_class.png){.r-stretch}
+:::
+
+::: {.aside}
+See @barnes_understanding_2021
 :::
 
 ## Application: EUV Flare Emission {background-video="http://solar.physics.montana.edu/www/reu/2022/bparker/files/aia_211_dist.mp4" background-size="contain" background-video-loop="true"}
